@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "RCoiaiVcDschvjzXBDjoY/3YRoW1K37XypOrZAmtMOA=",
+  "Source": "Open.Billing.Api",
+  "BasePath": "_content/Open.Billing.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

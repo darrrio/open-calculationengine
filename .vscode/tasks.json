@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/open-billing-api/open-billing-api.csproj",
+                "${workspaceFolder}/open-billing-dotnet.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/open-billing-api/open-billing-api.csproj",
+                "${workspaceFolder}/open-billing-dotnet.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/open-billing-api/open-billing-api.csproj"
+                "${workspaceFolder}/open-billing-dotnet.sln"
             ],
             "problemMatcher": "$msCompile"
         }
