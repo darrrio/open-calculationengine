@@ -55,10 +55,8 @@ public class BillController : ControllerBase
         }
         Hashtable data = JsonSerializer.Deserialize<Hashtable>(output)!;
         Context context = new Context(data);
-        BillingNode billingNode = new BillingNode(context);
-        billingNode.setFormula(configuration);
-        billingNode.scanFormula();
-        return billingNode.interpret();
+        BillingExpression billingNode = new BillingExpression(context);
+        return billingNode.Evaluate(configuration);
     }
     /// <summary>
     /// Delete a generated bill

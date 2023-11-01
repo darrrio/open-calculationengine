@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.Billing.Api", "Open.Billing.Api\Open.Billing.Api.csproj", "{53AA88DC-6130-4DD4-96C5-3AC4C77ED9D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.Billing", "Open.Billing\Open.Billing.csproj", "{88FA03E0-BCDD-43D6-BA81-83181E46CFFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.Billing.Test", "Open.Billing.Test\Open.Billing.Test.csproj", "{93348A03-4EB6-4EB7-913C-DE283BD15C9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{53AA88DC-6130-4DD4-96C5-3AC4C77ED9D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53AA88DC-6130-4DD4-96C5-3AC4C77ED9D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53AA88DC-6130-4DD4-96C5-3AC4C77ED9D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88FA03E0-BCDD-43D6-BA81-83181E46CFFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88FA03E0-BCDD-43D6-BA81-83181E46CFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88FA03E0-BCDD-43D6-BA81-83181E46CFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88FA03E0-BCDD-43D6-BA81-83181E46CFFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93348A03-4EB6-4EB7-913C-DE283BD15C9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93348A03-4EB6-4EB7-913C-DE283BD15C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93348A03-4EB6-4EB7-913C-DE283BD15C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93348A03-4EB6-4EB7-913C-DE283BD15C9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

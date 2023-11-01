@@ -32,3 +32,5 @@
 /workspaces/open-billing-dotnet/Open.Billing.Api/obj/Debug/net7.0/Open.Billing.Api.pdb
 /workspaces/open-billing-dotnet/Open.Billing.Api/obj/Debug/net7.0/Open.Billing.Api.genruntimeconfig.cache
 /workspaces/open-billing-dotnet/Open.Billing.Api/obj/Debug/net7.0/ref/Open.Billing.Api.dll
+/workspaces/open-billing-dotnet/Open.Billing.Api/bin/Debug/net7.0/Open.Billing.dll
+/workspaces/open-billing-dotnet/Open.Billing.Api/bin/Debug/net7.0/Open.Billing.pdb

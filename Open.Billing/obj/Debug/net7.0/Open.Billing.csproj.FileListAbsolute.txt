@@ -1,0 +1,11 @@
+/workspaces/open-billing-dotnet/Open.Billing/bin/Debug/net7.0/Open.Billing.deps.json
+/workspaces/open-billing-dotnet/Open.Billing/bin/Debug/net7.0/Open.Billing.dll
+/workspaces/open-billing-dotnet/Open.Billing/bin/Debug/net7.0/Open.Billing.pdb
+/workspaces/open-billing-dotnet/Open.Billing/obj/Debug/net7.0/Open.Billing.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/open-billing-dotnet/Open.Billing/obj/Debug/net7.0/Open.Billing.AssemblyInfoInputs.cache
+/workspaces/open-billing-dotnet/Open.Billing/obj/Debug/net7.0/Open.Billing.AssemblyInfo.cs
+/workspaces/open-billing-dotnet/Open.Billing/obj/Debug/net7.0/Open.Billing.csproj.CoreCompileInputs.cache
+/workspaces/open-billing-dotnet/Open.Billing/obj/Debug/net7.0/Open.Billing.dll
+/workspaces/open-billing-dotnet/Open.Billing/obj/Debug/net7.0/refint/Open.Billing.dll
+/workspaces/open-billing-dotnet/Open.Billing/obj/Debug/net7.0/Open.Billing.pdb
+/workspaces/open-billing-dotnet/Open.Billing/obj/Debug/net7.0/ref/Open.Billing.dll

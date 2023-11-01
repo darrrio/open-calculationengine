@@ -103,6 +103,16 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "Open.Billing/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/Open.Billing.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Open.Billing.dll": {}
+        }
       }
     }
   },
@@ -439,11 +449,17 @@
         "swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "Open.Billing/1.0.0": {
+      "type": "project",
+      "path": "../Open.Billing/Open.Billing.csproj",
+      "msbuildProject": "../Open.Billing/Open.Billing.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
       "Microsoft.AspNetCore.OpenApi >= 7.0.12",
+      "Open.Billing >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.5.0"
     ]
   },
@@ -471,7 +487,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/workspaces/open-billing-dotnet/Open.Billing/Open.Billing.csproj": {
+              "projectPath": "/workspaces/open-billing-dotnet/Open.Billing/Open.Billing.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

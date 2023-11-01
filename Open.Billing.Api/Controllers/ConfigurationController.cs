@@ -57,5 +57,5 @@ public class ConfigurationController : ControllerBase
 
 public class BillConfiguration
 {
-    public string? formula { get; set; }
+    public string? Expression { get; set; }
 }
