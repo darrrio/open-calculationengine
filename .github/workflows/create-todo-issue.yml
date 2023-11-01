@@ -18,3 +18,5 @@ jobs:
               uses: "alstr/todo-to-issue-action@v4.11"
               env:
                 PROJECTS_SECRET: ${{ secrets.GITHUB_TOKEN }}
+                MANUAL_COMMIT_REF: ${{ inputs.MANUAL_COMMIT_REF }}
+                MANUAL_BASE_REF: ${{ inputs.MANUAL_BASE_REF }}
