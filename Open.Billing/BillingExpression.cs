@@ -14,7 +14,7 @@ public class BillingExpression
     private string? _operator;
     public string? op { get { return _operator; } }
     private decimal _result;
-    
+
     //TODO: Optimize to use simpler regex definitions and dynamic levels
     private static string regex = "(\\$[A-z]+.[A-z]+)";
     private static string regexFirst = "(?:\\(\\$.+;\\$)";
@@ -28,27 +28,31 @@ public class BillingExpression
     public BillingExpression(Context context)
     {
         _context = context;
-    }    
+    }
     public decimal Evaluate(string? expression)
     {
         scanExpression(expression);
+        return evaluate(expression);
+    }
+    private decimal evaluate(string? expression)
+    {
         //TODO: Optimize to use dynamic levels for data input
         if (isFirstLevelParam())
         {
             _operator = _value;
-            Dictionary<string,dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
+            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
             _result = JsonSerializer.Deserialize<decimal>(dict[value!]);
         }
         else if (isSecondLevelParam())
         {
             _operator = _value;
-            Dictionary<string,dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
+            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
             _result = JsonSerializer.Deserialize<decimal>(dict["SERVICES"][0].GetProperty(value!));
         }
         else if (isThirdLevelParam())
         {
             _operator = _value;
-            Dictionary<string,dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
+            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
             _result = JsonSerializer.Deserialize<decimal>(dict["SERVICES"][0].GetProperty("BILLINGUNITS")[0].GetProperty(value!));
         }
         else
@@ -58,6 +62,8 @@ public class BillingExpression
 
         return _result;
     }
+
+
     private bool isThirdLevelParam()
     {
         if (value == null)
@@ -129,12 +135,12 @@ public class BillingExpression
         {
             case "$OP.SUM":
                 {
-                    _result = leftExpression!.Evaluate(expression) + rightExpression!.Evaluate(expression);
+                    _result = leftExpression!.evaluate(expression) + rightExpression!.evaluate(expression);
                     break;
                 }
             case "$OP.MULTIPLY":
                 {
-                    _result = leftExpression!.Evaluate(expression) * rightExpression!.Evaluate(expression);
+                    _result = leftExpression!.evaluate(expression) * rightExpression!.evaluate(expression);
                     break;
                 }
             case "$FN.TARIFF":
