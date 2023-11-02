@@ -2,19 +2,33 @@
 using static Open.Billing.Utility.Extensions;
 using System.Collections;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Open.Billing;
 public class Context
 {
-    public Hashtable data { get; set; }
-    public Context(Hashtable baseData)
+    private JsonObject data { get; set; }
+    public Dictionary<string, dynamic> Data
+    {
+        get
+        {
+            return data.ToDictionary(kvp => (string)kvp.Key, kvp => (dynamic)kvp.Value!);
+        }
+    }
+    public Dictionary<string, dynamic> FlatData
+    {
+        get
+        {
+            return FlatDictionary(data);
+        }
+    }
+    public Context(JsonObject baseData)
     {
         data = baseData;
     }
     public decimal GetTariff()
     {
-        var dict = HashtableToDictionary<string, dynamic>(data);
-        return JsonSerializer.Deserialize<decimal>(dict["SERVICES"][0].GetProperty("BILLINGUNITS")[0].GetProperty("$PRM3.TARIFF"));
+        return JsonSerializer.Deserialize<decimal>(FlatData["$PRM3.TARIFF"]);
     }
     
 

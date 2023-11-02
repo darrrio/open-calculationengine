@@ -3,7 +3,19 @@
 {
 	"name": "C# (.NET)",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/dotnet:1-7.0-bullseye"
+	"image": "mcr.microsoft.com/devcontainers/dotnet:1-7.0-bullseye",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"piotrpalarz.vscode-gitignore-generator",
+				"ms-dotnettools.csdevkit",
+				"github.vscode-github-actions",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"bierner.github-markdown-preview"
+			]
+		}
+	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},

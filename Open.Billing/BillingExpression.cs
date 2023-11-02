@@ -8,6 +8,7 @@ public class BillingExpression
 {
     public BillingExpression? leftExpression;
     public BillingExpression? rightExpression;
+    public List<BillingExpression> Childrens { get; set; } = new List<BillingExpression>();
     private Context _context;
     private string? _value;
     private string? _operator;
@@ -29,12 +30,63 @@ public class BillingExpression
     {
         _context = context;
     }
+    public void SetValue(string value)
+    {
+        _value = value;
+    }
     public decimal Evaluate(string expression)
     {
         _ParseExpression(expression);
         return _Evaluate(expression);
     }
-
+    public decimal EvaluateComplex(string expression)
+    {
+        if(expression == null)
+        {
+            return 0;
+        }
+        Parser parser = new Parser(_context);
+        var billingExpression = parser.Parse(expression);
+        Console.WriteLine($"Expression: {expression}");  // Debug statement
+        return billingExpression._EvaluateComplex();
+    }
+    private decimal _EvaluateComplex()
+    {
+        Console.WriteLine($"Expression: {Value}");  // Debug statement
+        Console.WriteLine($"Childrens: {Childrens.ToArray()}");  // Debug statement
+        if (Childrens.Count == 0)
+        {
+            _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
+        }
+        switch (Value)
+        {
+            case "$OP.SUM":
+                {
+                    _result = Childrens.Sum(child => child._EvaluateComplex());
+                    Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                    break;
+                }
+            case "$OP.MULTIPLY":
+                {
+                    _result = Childrens.Aggregate(1m, (acc, child) => acc * child._EvaluateComplex());
+                    Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                    break;
+                }
+            case "$FN.TARIFF":
+                {
+                    _result = _context.GetTariff();
+                    Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                    break;
+                }
+            default:
+                {
+                    _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
+                    Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                    break;
+                }
+        }
+        return _result;
+    }
     private void _ParseExpression(string? expression)
     {
         if (expression == null)
@@ -67,27 +119,23 @@ public class BillingExpression
         leftExpression._ParseExpression(firstMatch);
         rightExpression._ParseExpression(secondMatch);
     }
-
     private decimal _Evaluate(string? expression)
     {
         //TODO: Optimize to use dynamic levels for data input
         if (_IsFirstLevelParam())
         {
             _operator = _value;
-            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
-            _result = JsonSerializer.Deserialize<decimal>(dict[Value!]);
+            _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
         }
         else if (_IsSecondLevelParam())
         {
             _operator = _value;
-            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
-            _result = JsonSerializer.Deserialize<decimal>(dict["SERVICES"][0].GetProperty(Value!));
+            _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
         }
         else if (_IsThirdLevelParam())
         {
             _operator = _value;
-            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
-            _result = JsonSerializer.Deserialize<decimal>(dict["SERVICES"][0].GetProperty("BILLINGUNITS")[0].GetProperty(Value!));
+            _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
         }
         else
         {
@@ -119,7 +167,6 @@ public class BillingExpression
 
         return _result;
     }
-
     private bool _IsThirdLevelParam()
     {
         if (Value == null)

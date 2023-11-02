@@ -1,24 +1,22 @@
 {
     "configurations": [
         {
-            "type": "DotNetAutoAttach",
-            "request": "launch",
-            "name": ".NET Core Watch",
-            "args": [],
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
-        },        
-        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
         },
-    {
-        "name": "C#: Open.Billing.Api Debug",
-        "type": "dotnet",
-        "request": "launch",
-        "projectPath": "${workspaceFolder}/Open.Billing.Api/Open.Billing.Api.csproj"
-    }
+        {
+            "name": "C#: Open.Billing.Api Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Open.Billing.Api/Open.Billing.Api.csproj"
+        },
+        {
+            "name": "C#: Open.Billing.Api [http]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Open.Billing.Api/Open.Billing.Api.csproj",
+            "launchConfigurationId": "TargetFramework=;http"
+        }
     ]
 }
