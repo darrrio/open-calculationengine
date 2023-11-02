@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Open.Billing.Api.Controllers;
@@ -53,10 +54,10 @@ public class BillController : ControllerBase
             Console.WriteLine("The file could not be read:");
             Console.WriteLine(e.Message);
         }
-        Hashtable data = JsonSerializer.Deserialize<Hashtable>(output)!;
+        JsonObject data = JsonSerializer.Deserialize<JsonObject>(output)!;
         Context context = new Context(data);
         BillingExpression billingNode = new BillingExpression(context);
-        return billingNode.Evaluate(configuration);
+        return billingNode.EvaluateComplex(configuration);
     }
     /// <summary>
     /// Delete a generated bill

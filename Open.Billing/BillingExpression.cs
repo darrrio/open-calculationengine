@@ -8,10 +8,11 @@ public class BillingExpression
 {
     public BillingExpression? leftExpression;
     public BillingExpression? rightExpression;
+    public List<BillingExpression> Childrens { get; set; } = new List<BillingExpression>();
     private Context _context;
     private string? _value;
     private string? _operator;
-    private decimal _result;
+    private decimal _result = 0;
     public string? Value { get { return _value; } }
     public string? Op { get { return _operator; } }
 
@@ -33,6 +34,92 @@ public class BillingExpression
     {
         _ParseExpression(expression);
         return _Evaluate(expression);
+    }
+    public decimal EvaluateComplex(string expression)
+    {
+        _ParseExpressionComplex(expression);
+        Console.WriteLine($"Expression: {expression}");  // Debug statement
+        return _EvaluateComplex();
+    }
+
+    private decimal _EvaluateComplex()
+    {
+        Console.WriteLine($"Expression: {Value}");  // Debug statement
+        Console.WriteLine($"Childrens: {Childrens.ToList()}");  // Debug statement
+        if (Childrens.Count == 0)
+        {
+            return JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
+        }
+        foreach (var child in Childrens)
+        {
+            switch (Value)
+            {
+                case "$OP.SUM":
+                    {
+                        _result = child.Childrens.Sum(x => x._EvaluateComplex());
+                        Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                        break;
+                    }
+                case "$OP.MULTIPLY":
+                    {
+                        _result = child.Childrens.Aggregate(1m, (x, y) => x * y._EvaluateComplex());
+                        Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                        break;
+                    }
+                case "$FN.TARIFF":
+                    {
+                        _result = _context.GetTariff();
+                        Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                        break;
+                    }
+                default:
+                    {
+                        _result = 0;
+                        Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                        break;
+                    }
+            }
+        }
+        return _result;
+    }
+
+    private void _ParseExpressionComplex(string expression)
+    {
+        _ParseExpressionNode(expression);
+    }
+    private BillingExpression _ParseExpressionNode(string expression)
+    {
+        var index = 0;
+        int start = index;
+        try
+        {
+            // Could be a leaf node -> No '(' throws IndexOutOfRangeException
+            while (expression[index] != '(')
+            {
+                index++;
+            }
+            // Extract value before '('
+            _value = expression[start..index];
+            // Skip '('
+            index++;
+            int startParams = index;
+            while (expression[index] != ')')
+            {
+                index++;
+                // Skip ';'
+                if (expression[index] == ';')
+                {
+                    Childrens.Add(_ParseExpressionNode(expression[startParams..index]));
+                    startParams = index;
+                }
+            }
+        }
+        catch (IndexOutOfRangeException ex)
+        {
+            // skip exception for leaf nodes, set expression as value
+            _value = expression;
+        }
+        return this;
     }
 
     private void _ParseExpression(string? expression)
@@ -74,20 +161,17 @@ public class BillingExpression
         if (_IsFirstLevelParam())
         {
             _operator = _value;
-            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
-            _result = JsonSerializer.Deserialize<decimal>(dict[Value!]);
+            _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
         }
         else if (_IsSecondLevelParam())
         {
             _operator = _value;
-            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
-            _result = JsonSerializer.Deserialize<decimal>(dict["SERVICES"][0].GetProperty(Value!));
+            _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
         }
         else if (_IsThirdLevelParam())
         {
             _operator = _value;
-            Dictionary<string, dynamic> dict = HashtableToDictionary<string, dynamic>(_context.data);
-            _result = JsonSerializer.Deserialize<decimal>(dict["SERVICES"][0].GetProperty("BILLINGUNITS")[0].GetProperty(Value!));
+            _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
         }
         else
         {
