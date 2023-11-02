@@ -45,11 +45,7 @@ public class BillingExpression
     private decimal _EvaluateComplex()
     {
         Console.WriteLine($"Expression: {Value}");  // Debug statement
-        Console.WriteLine($"Childrens: {Childrens.ToList()}");  // Debug statement
-        if (Childrens.Count == 0)
-        {
-            return JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
-        }
+        Console.WriteLine($"Childrens: {Childrens.ToArray()}");  // Debug statement
         foreach (var child in Childrens)
         {
             switch (Value)
@@ -74,7 +70,7 @@ public class BillingExpression
                     }
                 default:
                     {
-                        _result = 0;
+                        _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
                         Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
                         break;
                     }
