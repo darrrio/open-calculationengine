@@ -1,18 +1,9 @@
-using System.Collections;
 using System.Text.Json.Nodes;
 
 namespace Open.Billing.Utility
 {
     public static class Extensions
     {
-        public static Dictionary<K, V> JsonObjectToDictionary<K, V>(JsonObject table)
-            where K : notnull
-        {
-            return table
-              .Cast<DictionaryEntry>()
-              .ToDictionary(kvp => (K)kvp.Key, kvp => (V)kvp.Value!);
-        }
-
         public static Dictionary<string, dynamic> FlatDictionary(JsonObject dict, string prefix = "")
         {
             Dictionary<string, dynamic> result = new Dictionary<string, dynamic>();

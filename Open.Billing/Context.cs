@@ -8,13 +8,6 @@ namespace Open.Billing;
 public class Context
 {
     private JsonObject data { get; set; }
-    public Dictionary<string, dynamic> Data
-    {
-        get
-        {
-            return data.ToDictionary(kvp => (string)kvp.Key, kvp => (dynamic)kvp.Value!);
-        }
-    }
     public Dictionary<string, dynamic> FlatData
     {
         get
