@@ -1,53 +1,67 @@
+using System.Text;
+using System.Text.RegularExpressions;
+using Open.Billing;
+
 public class Parser
 {
-    private string[] tokens;
-    private int index;
-
-    public Expression Parse(string expression)
+    private Context _context;
+    public Parser(Context context)
     {
-        tokens = expression.Split(' ');
-        index = 0;
-        return ParseExpression();
+        _context = context;
     }
-
-    private Expression ParseExpression()
+    public BillingExpression Parse(string expression)
     {
-        if (tokens[index].StartsWith("$OP."))
+        BillingExpression billingExpression = new BillingExpression(_context);
+
+        if (expression == null || expression == "")
         {
-            return ParseOperator();
+            return billingExpression;
         }
-        else if (tokens[index].StartsWith("$FN."))
+
+        var match = Regex.Match(expression, @"(\$[A-z]+\.[A-z]+)\((.*)\)");
+        if (match.Success)
         {
-            return ParseFunction();
-        }
-        else if (tokens[index].StartsWith("$PRM"))
-        {
-            return ParseParameter();
+            billingExpression.SetValue(match.Groups[1].Value);
+            var parameters = SplitParameters(match.Groups[2].Value);
+            billingExpression.Childrens = parameters.Select(Parse).ToList();
         }
         else
         {
-            throw new Exception("Unknown token: " + tokens[index]);
+            billingExpression.SetValue(expression);
         }
+        return billingExpression;
     }
-
-    private Expression ParseOperator()
+    private List<string> SplitParameters(string parameters)
     {
-        string op = tokens[index++];
-        Expression left = ParseExpression();
-        Expression right = ParseExpression();
-        return new OperatorExpression(op, left, right);
-    }
+        var splitParameters = new List<string>();
+        var currentParameter = new StringBuilder();
+        int openParentheses = 0;
 
-    private Expression ParseFunction()
-    {
-        string func = tokens[index++];
-        Expression argument = ParseExpression();
-        return new FunctionExpression(func, argument);
-    }
+        foreach (char c in parameters)
+        {
+            if (c == '(')
+            {
+                openParentheses++;
+            }
+            else if (c == ')')
+            {
+                openParentheses--;
+            }
 
-    private Expression ParseParameter()
-    {
-        string param = tokens[index++];
-        return new ParameterExpression(param);
+            currentParameter.Append(c);
+
+            if (c == ';' && openParentheses == 0)
+            {
+                splitParameters.Add(currentParameter.ToString().TrimEnd(';'));
+                currentParameter.Clear();
+            }
+        }
+
+        if (currentParameter.Length > 0)
+        {
+            splitParameters.Add(currentParameter.ToString());
+        }
+
+        return splitParameters;
     }
 }

@@ -12,7 +12,7 @@ public class BillingExpression
     private Context _context;
     private string? _value;
     private string? _operator;
-    private decimal _result = 0;
+    private decimal _result;
     public string? Value { get { return _value; } }
     public string? Op { get { return _operator; } }
 
@@ -30,6 +30,10 @@ public class BillingExpression
     {
         _context = context;
     }
+    public void SetValue(string value)
+    {
+        _value = value;
+    }
     public decimal Evaluate(string expression)
     {
         _ParseExpression(expression);
@@ -37,87 +41,52 @@ public class BillingExpression
     }
     public decimal EvaluateComplex(string expression)
     {
-        _ParseExpressionComplex(expression);
+        if(expression == null)
+        {
+            return 0;
+        }
+        Parser parser = new Parser(_context);
+        var billingExpression = parser.Parse(expression);
         Console.WriteLine($"Expression: {expression}");  // Debug statement
-        return _EvaluateComplex();
+        return billingExpression._EvaluateComplex();
     }
-
     private decimal _EvaluateComplex()
     {
         Console.WriteLine($"Expression: {Value}");  // Debug statement
         Console.WriteLine($"Childrens: {Childrens.ToArray()}");  // Debug statement
-        foreach (var child in Childrens)
+        if (Childrens.Count == 0)
         {
-            switch (Value)
-            {
-                case "$OP.SUM":
-                    {
-                        _result = child.Childrens.Sum(x => x._EvaluateComplex());
-                        Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
-                        break;
-                    }
-                case "$OP.MULTIPLY":
-                    {
-                        _result = child.Childrens.Aggregate(1m, (x, y) => x * y._EvaluateComplex());
-                        Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
-                        break;
-                    }
-                case "$FN.TARIFF":
-                    {
-                        _result = _context.GetTariff();
-                        Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
-                        break;
-                    }
-                default:
-                    {
-                        _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
-                        Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
-                        break;
-                    }
-            }
+            _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
+        }
+        switch (Value)
+        {
+            case "$OP.SUM":
+                {
+                    _result = Childrens.Sum(child => child._EvaluateComplex());
+                    Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                    break;
+                }
+            case "$OP.MULTIPLY":
+                {
+                    _result = Childrens.Aggregate(1m, (acc, child) => acc * child._EvaluateComplex());
+                    Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                    break;
+                }
+            case "$FN.TARIFF":
+                {
+                    _result = _context.GetTariff();
+                    Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                    break;
+                }
+            default:
+                {
+                    _result = JsonSerializer.Deserialize<decimal>(_context.FlatData[Value!]);
+                    Console.WriteLine($"Value: {Value}, Result: {_result}");  // Debug statement
+                    break;
+                }
         }
         return _result;
     }
-
-    private void _ParseExpressionComplex(string expression)
-    {
-        _ParseExpressionNode(expression);
-    }
-    private BillingExpression _ParseExpressionNode(string expression)
-    {
-        var index = 0;
-        int start = index;
-        try
-        {
-            // Could be a leaf node -> No '(' throws IndexOutOfRangeException
-            while (expression[index] != '(')
-            {
-                index++;
-            }
-            // Extract value before '('
-            _value = expression[start..index];
-            // Skip '('
-            index++;
-            int startParams = index;
-            while (expression[index] != ')')
-            {
-                index++;
-                // Skip ';'
-                if (expression[index] == ';')
-                {
-                    Childrens.Add(_ParseExpressionNode(expression[startParams..index]));
-                    startParams = index;
-                }
-            }
-        }
-        catch (IndexOutOfRangeException ex)
-        {
-            // skip exception for leaf nodes, set expression as value
-            _value = expression;
-        }
-        return this;
-    }
-
     private void _ParseExpression(string? expression)
     {
         if (expression == null)
@@ -150,7 +119,6 @@ public class BillingExpression
         leftExpression._ParseExpression(firstMatch);
         rightExpression._ParseExpression(secondMatch);
     }
-
     private decimal _Evaluate(string? expression)
     {
         //TODO: Optimize to use dynamic levels for data input
@@ -199,7 +167,6 @@ public class BillingExpression
 
         return _result;
     }
-
     private bool _IsThirdLevelParam()
     {
         if (Value == null)
