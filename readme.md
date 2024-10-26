@@ -1,6 +1,6 @@
-# OpenBilling
+# OpenCalculationEngine
 
-[![.NET](https://github.com/darrrio/open-billing-dotnet/actions/workflows/dotnet.yml/badge.svg)](https://github.com/darrrio/open-billing-dotnet/actions/workflows/dotnet.yml)
+[![.NET](https://github.com/darrrio/open-calculationengine/actions/workflows/dotnet.yml/badge.svg)](https://github.com/darrrio/open-calculationengine/actions/workflows/dotnet.yml)
 
 ## Description
 
@@ -11,8 +11,8 @@ The operations are defined with an excel-like language.
 ## Installation
 
 ```bash
-git clone https://github.com/darrrio/open-billing-dotnet.git
-cd open-billing-dotnet
+git clone https://github.com/darrrio/open-calculationengine.git
+cd open-calculationengine
 dotnet restore
 dotnet build
 ```
