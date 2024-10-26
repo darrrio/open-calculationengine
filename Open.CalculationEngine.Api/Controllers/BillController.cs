@@ -3,18 +3,15 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Open.Billing.Api.Controllers;
+namespace Open.CalculationEngine.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class BillController : ControllerBase
+public class BillController(ILogger<BillController> logger, Context context, ExpressionNode billingExpression) : ControllerBase
 {
-    private readonly ILogger<BillController> _logger;
-
-    public BillController(ILogger<BillController> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<BillController> _logger = logger;
+    private readonly Context _context = context;
+    private readonly ExpressionNode _billingExpression = billingExpression;
 
     /// <summary>
     /// Get a bill
@@ -55,8 +52,9 @@ public class BillController : ControllerBase
             Console.WriteLine(e.Message);
         }
         JsonObject data = JsonSerializer.Deserialize<JsonObject>(output)!;
-        Context context = new Context(data);
-        BillingExpression billingNode = new BillingExpression(context);
+        _context.SetData(data);
+        _billingExpression.SetContext(_context);
+        ExpressionNode billingNode = _billingExpression;
         return billingNode.EvaluateComplex(configuration);
     }
     /// <summary>

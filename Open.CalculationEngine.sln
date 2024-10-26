@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.Billing.Api", "Open.Billing.Api\Open.Billing.Api.csproj", "{53AA88DC-6130-4DD4-96C5-3AC4C77ED9D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.CalculationEngine.Api", "Open.CalculationEngine.Api\Open.CalculationEngine.Api.csproj", "{53AA88DC-6130-4DD4-96C5-3AC4C77ED9D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.Billing", "Open.Billing\Open.Billing.csproj", "{88FA03E0-BCDD-43D6-BA81-83181E46CFFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.CalculationEngine", "Open.CalculationEngine\Open.CalculationEngine.csproj", "{88FA03E0-BCDD-43D6-BA81-83181E46CFFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.Billing.Test", "Open.Billing.Test\Open.Billing.Test.csproj", "{93348A03-4EB6-4EB7-913C-DE283BD15C9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Open.CalculationEngine.Test", "Open.CalculationEngine.Test\Open.CalculationEngine.Test.csproj", "{93348A03-4EB6-4EB7-913C-DE283BD15C9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

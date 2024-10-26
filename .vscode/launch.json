@@ -6,16 +6,16 @@
             "request": "attach"
         },
         {
-            "name": "C#: Open.Billing.Api Debug",
+            "name": "C#: Open.CalculationEngine.Api Debug",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/Open.Billing.Api/Open.Billing.Api.csproj"
+            "projectPath": "${workspaceFolder}/Open.CalculationEngine.Api/Open.CalculationEngine.Api.csproj"
         },
         {
-            "name": "C#: Open.Billing.Api [http]",
+            "name": "C#: Open.CalculationEngine.Api [http]",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/Open.Billing.Api/Open.Billing.Api.csproj",
+            "projectPath": "${workspaceFolder}/Open.CalculationEngine.Api/Open.CalculationEngine.Api.csproj",
             "launchConfigurationId": "TargetFramework=;http"
         }
     ]

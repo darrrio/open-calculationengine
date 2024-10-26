@@ -1,28 +1,27 @@
-using System.Collections;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Open.Billing.Api.Controllers;
+namespace Open.CalculationEngine.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class DataController : ControllerBase
+public class ConfigurationController : ControllerBase
 {
-    private readonly ILogger<DataController> _logger;
+    private readonly ILogger<ConfigurationController> _logger;
 
-    public DataController(ILogger<DataController> logger)
+    public ConfigurationController(ILogger<ConfigurationController> logger)
     {
         _logger = logger;
     }
 
     /// <summary>
-    /// Get the billing data
+    /// Get the billing configuration
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IEnumerable<Hashtable> Get()
+    public IEnumerable<BillConfiguration> Get()
     {
-        string fileName = "data.json";
+        string fileName = "configuration.json";
         string output = "";
         try
         {
@@ -37,17 +36,17 @@ public class DataController : ControllerBase
             Console.WriteLine("The file could not be read:");
             Console.WriteLine(e.Message);
         }
-        return new List<Hashtable>() { JsonSerializer.Deserialize<Hashtable>(output)! };
+        return new List<BillConfiguration>() { JsonSerializer.Deserialize<BillConfiguration>(output)! };
     }
 
     /// <summary>
-    /// Load the billing data
+    /// Load the billing configuration
     /// </summary>
     /// <param name="configuration"></param>
     [HttpPut]
-    public async Task PutAsync([FromBody] Hashtable configuration)
+    public async Task PutAsync([FromBody] BillConfiguration configuration)
     {
-        string fileName = "data.json";
+        string fileName = "configuration.json";
         string jsonString = JsonSerializer.Serialize(configuration);
         using (StreamWriter outputFile = new StreamWriter(Path.Combine("./", fileName)))
         {
@@ -56,4 +55,7 @@ public class DataController : ControllerBase
     }
 }
 
-
+public class BillConfiguration
+{
+    public string? Expression { get; set; }
+}

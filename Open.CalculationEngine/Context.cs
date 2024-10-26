@@ -1,21 +1,27 @@
 
-using static Open.Billing.Utility.Extensions;
-using System.Collections;
+using static Open.CalculationEngine.Utility.Extensions;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace Open.Billing;
+namespace Open.CalculationEngine;
 public class Context
 {
-    private JsonObject Data { get; set; }
+    private JsonObject? Data { get; set; } = null;
     public Dictionary<string, dynamic> FlatData
     {
         get
         {
+            if(Data == null)
+            {
+                throw new Exception("Data is not set");
+            }
             return FlatDictionary(Data);
         }
     }
-    public Context(JsonObject baseData)
+    public Context()
+    {
+    }
+    public void SetData(JsonObject baseData)
     {
         Data = baseData;
     }

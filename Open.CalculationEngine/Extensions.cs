@@ -1,6 +1,6 @@
 using System.Text.Json.Nodes;
 
-namespace Open.Billing.Utility
+namespace Open.CalculationEngine.Utility
 {
     public static class Extensions
     {

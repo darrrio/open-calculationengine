@@ -12,8 +12,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Open Billing API",
-        Description = "An ASP.NET Core Web API for managing Billing operations",
+        Title = "Open CalculationEngine API",
+        Description = "An ASP.NET Core Web API for managing CalculationEngine operations",
         TermsOfService = new Uri("https://example.com/terms"),
         Contact = new OpenApiContact
         {
