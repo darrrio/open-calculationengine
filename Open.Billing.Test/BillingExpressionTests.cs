@@ -6,9 +6,9 @@ namespace Open.Billing.Test;
 public class BillingExpressionTests
 {
     [Theory(Timeout = 1000)]
-    [InlineData(TestHelper.Evaluate_InputData, TestHelper.Evaluate_ParameterExpression_InputExpression, TestHelper.Evaluate_ParameterExpression_Result)]
-    [InlineData(TestHelper.Evaluate_InputData, TestHelper.Evaluate_SimpleExpression_InputExpression, TestHelper.Evaluate_SimpleExpression_Result)]
-    [InlineData(TestHelper.Evaluate_InputData, TestHelper.Evaluate_ComplexExpression_InputExpression, TestHelper.Evaluate_ComplexExpression_Result)]
+    [InlineData(TestHelper.EvaluateInputData, TestHelper.EvaluateParameterExpressionInputExpression, TestHelper.EvaluateParameterExpressionResult)]
+    [InlineData(TestHelper.EvaluateInputData, TestHelper.EvaluateSimpleExpressionInputExpression, TestHelper.EvaluateSimpleExpressionResult)]
+    [InlineData(TestHelper.EvaluateInputData, TestHelper.EvaluateComplexExpressionInputExpression, TestHelper.EvaluateComplexExpressionResult)]
     public void EvaluateComplex(string inputData, string inputExpression, double expected)
     {
         //Arrange

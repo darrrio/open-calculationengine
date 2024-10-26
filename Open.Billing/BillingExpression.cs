@@ -5,26 +5,24 @@ using System.Text.RegularExpressions;
 namespace Open.Billing;
 public class BillingExpression
 {
-    public BillingExpression? leftExpression;
-    public BillingExpression? rightExpression;
+    public BillingExpression? LeftExpression;
+    public BillingExpression? RightExpression;
     public List<BillingExpression> Childrens { get; set; } = new List<BillingExpression>();
-    private Context _context;
-    private string? _value;
-    private string? _operator;
+    private readonly Context _context;
     private decimal _result;
-    public string? Value { get { return _value; } }
-    public string? Op { get { return _operator; } }
+    private string? Value { get; set; }
+
     public BillingExpression(Context context)
     {
         _context = context;
     }
     public void SetValue(string value)
     {
-        _value = value;
+        Value = value;
     }
-    public decimal EvaluateComplex(string expression)
+    public decimal EvaluateComplex(string? expression = null)
     {
-        if(expression == null)
+        if (expression == null)
         {
             return 0;
         }

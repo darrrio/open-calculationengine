@@ -7,17 +7,17 @@ using System.Text.Json.Nodes;
 namespace Open.Billing;
 public class Context
 {
-    private JsonObject data { get; set; }
+    private JsonObject Data { get; set; }
     public Dictionary<string, dynamic> FlatData
     {
         get
         {
-            return FlatDictionary(data);
+            return FlatDictionary(Data);
         }
     }
     public Context(JsonObject baseData)
     {
-        data = baseData;
+        Data = baseData;
     }
     public decimal GetTariff()
     {
