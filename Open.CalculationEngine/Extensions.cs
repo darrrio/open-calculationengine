@@ -1,6 +1,6 @@
 using System.Text.Json.Nodes;
 
-namespace Open.CalculationEngine.Utility
+namespace Open.CalculationEngine
 {
     public static class Extensions
     {

@@ -1,5 +1,5 @@
 
-using static Open.CalculationEngine.Utility.Extensions;
+using static Open.CalculationEngine.Extensions;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 

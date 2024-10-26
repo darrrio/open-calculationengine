@@ -4,10 +4,10 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
 namespace Open.CalculationEngine;
+
 public class ExpressionNode(ILogger<ExpressionNode> logger)
 {
-    private readonly ILogger<ExpressionNode> _logger = logger;
-    public List<ExpressionNode> Children { get; set; } = new List<ExpressionNode>();
+    private List<ExpressionNode> Children { get; set; } = new();
     private Context? _context = null;
     private decimal _result;
     private string? Value { get; set; }
@@ -16,68 +16,73 @@ public class ExpressionNode(ILogger<ExpressionNode> logger)
     {
         _context = context;
     }
-    public void SetValue(string value)
+
+    private void SetValue(string value)
     {
         Value = value;
     }
-    public decimal EvaluateComplex(string? expression = null)
+
+    public decimal Evaluate(string? expression = null)
     {
         if (expression == null)
-        {
             return 0;
-        }
-
         var billingExpression = Parse(expression);
-        _logger.LogDebug($"Expression: {expression}");  
-        return billingExpression._EvaluateComplex();
+        logger.LogDebug($"Expression: {expression}");
+        return billingExpression.Eval();
     }
-    private decimal _EvaluateComplex()
+
+    private decimal Eval()
     {
-        _logger.LogDebug($"Expression: {Value}");  
-        _logger.LogDebug($"Children: {Children.ToArray()}");  
+        logger.LogDebug($"Expression: {Value}");
+        logger.LogDebug($"Children: {Children.ToArray()}");
 
         if (Children.Count == 0)
-        {
             _result = JsonSerializer.Deserialize<decimal>(_context!.FlatData[Value!]);
-        }
 
         switch (Value)
         {
             case "$OP.SUM":
-                {
-                    _result = Children.Sum(child => child._EvaluateComplex());
-                    _logger.LogDebug($"Value: {Value}, Result: {_result}");  
-                    break;
-                }
+            {
+                _result = Children.Sum(child => child.Eval());
+                logger.LogDebug($"Value: {Value}, Result: {_result}");
+                break;
+            }
             case "$OP.MULTIPLY":
-                {
-                    _result = Children.Aggregate(1m, (acc, child) => acc * child._EvaluateComplex());
-                    _logger.LogDebug($"Value: {Value}, Result: {_result}");  
-                    break;
-                }
+            {
+                _result = Children.Aggregate(1m, (acc, child) => decimal.Multiply(acc, child.Eval()));
+                logger.LogDebug($"Value: {Value}, Result: {_result}");
+                break;
+            }
+            case "$OP.DIVIDE":
+            {
+                _result = Children.Aggregate(1m, (acc, child) => decimal.Divide(acc, child.Eval()));
+                logger.LogDebug($"Value: {Value}, Result: {_result}");
+                break;
+            }
             case "$FN.TARIFF":
-                {
-                    _result = _context!.GetTariff();
-                    _logger.LogDebug($"Value: {Value}, Result: {_result}");  
-                    break;
-                }
+            {
+                _result = _context!.GetTariff();
+                logger.LogDebug($"Value: {Value}, Result: {_result}");
+                break;
+            }
             default:
-                {
-                    _result = JsonSerializer.Deserialize<decimal>(_context!.FlatData[Value!]);
-                    _logger.LogDebug($"Value: {Value}, Result: {_result}");  
-                    break;
-                }
+            {
+                _result = JsonSerializer.Deserialize<decimal>(_context!.FlatData[Value!]);
+                logger.LogDebug($"Value: {Value}, Result: {_result}");
+                break;
+            }
         }
+
         return _result;
     }
 
-    public ExpressionNode Parse(string expression)
+    private ExpressionNode Parse(string expression)
     {
-        ExpressionNode billingExpression = new ExpressionNode(_logger);
+        var billingExpression = new ExpressionNode(logger);
         billingExpression.SetContext(_context!);
-        _logger.LogInformation($"Parsing expression: {expression}");
+        logger.LogInformation($"Parsing expression: {expression}");
 
-        if (expression == null || expression == "")
+        if (string.IsNullOrEmpty(expression))
         {
             return billingExpression!;
         }
@@ -89,15 +94,18 @@ public class ExpressionNode(ILogger<ExpressionNode> logger)
             var parameters = SplitParameters(match.Groups[2].Value);
             billingExpression.Children = parameters.Select(Parse).ToList();
 
-            _logger.LogInformation($"Expression parsed: {expression}, Value: {match.Groups[1].Value}, Parameters: {parameters}");
+            logger.LogInformation(
+                $"Expression parsed: {expression}, Value: {match.Groups[1].Value}, Parameters: {parameters}");
         }
         else
         {
             billingExpression!.SetValue(expression);
         }
+
         return billingExpression;
     }
-    private List<string> SplitParameters(string parameters)
+
+    private static List<string> SplitParameters(string parameters)
     {
         var splitParameters = new List<string>();
         var currentParameter = new StringBuilder();

@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using Open.CalculationEngine;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Open CalculationEngine API",
-        Description = "An ASP.NET Core Web API for managing CalculationEngine operations",
+        Description = "An ASP.NET Core Web API for managing mathematics calculations.",
         TermsOfService = new Uri("https://example.com/terms"),
         Contact = new OpenApiContact
         {
@@ -27,15 +28,13 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+builder.Services.AddScoped<Context>();
+builder.Services.AddScoped<ExpressionNode>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();   
 
 app.UseHttpsRedirection();
 

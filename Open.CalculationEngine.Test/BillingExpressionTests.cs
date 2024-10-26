@@ -32,7 +32,7 @@ public class BillingExpressionTests
         billingNode.SetContext(context);
 
         //Act
-        double result = (double)billingNode.EvaluateComplex(inputExpression);
+        double result = (double)billingNode.Evaluate(inputExpression);
         
         //Assert
         Assert.Equal(expected, result);
@@ -46,7 +46,7 @@ public class BillingExpressionTests
         billingNode.SetContext(context);
 
         //Act
-        double result = (double)billingNode.EvaluateComplex(null);
+        double result = (double)billingNode.Evaluate(null);
 
         //Assert
         Assert.Equal(0, result);
